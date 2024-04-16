@@ -3,7 +3,7 @@ import {jwtDecode} from "jwt-decode";
 import dayjs from 'dayjs'
 
 
-const baseURL = 'https://renderdjangoexample-1t4b.onrender.com'
+const baseURL = 'http://94.26.225.46:8000/'
 
 
 let authTokens = localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null

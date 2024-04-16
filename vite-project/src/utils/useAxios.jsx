@@ -5,7 +5,7 @@ import { useContext } from 'react'
 import axiosInstance from './axiosInstance';
 import AuthContext from '../context/AuthContext';
 
-const baseURL = 'https://renderdjangoexample-1t4b.onrender.com'
+const baseURL = 'http://94.26.225.46:8000/'
 
 
 const useAxios = () => {
