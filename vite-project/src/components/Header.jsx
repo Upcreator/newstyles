@@ -28,7 +28,7 @@ const Header = () => {
                     <nav>
                         <ul className="flex space-x-4">
                             <li><a href="/practices" className="hover:text-gray-300">Практики</a></li>
-                            <li><a href="/appication_list" className="hover:text-gray-300">Заявки</a></li>
+                            <li><a href="/application_list" className="hover:text-gray-300">Заявки</a></li>
                             <li><a href="/moderators" className="hover:text-gray-300">Модераторы</a></li>
                             <li><a href="#" className="hover:text-gray-300" onClick={handleLogout}>Выйти</a></li>
                         </ul>

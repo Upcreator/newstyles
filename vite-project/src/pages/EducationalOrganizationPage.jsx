@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
-
+import Header from '../components/Header';
 const EducationalOrganizationPage = () => {
   const [educationalOrganizations, setEducationalOrganizations] = useState([]);
   const [newEducationalOrganization, setNewEducationalOrganization] = useState({ name: '', full_name: '' });
@@ -100,107 +100,110 @@ const EducationalOrganizationPage = () => {
   });
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Образовательные учреждения</h2>
-      <div className="mb-4">
-        <input 
-          type="text"
-          placeholder="Искать по названию..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 rounded border border-gray-400 mr-2"
-        />
-      </div>
-      <button 
-        onClick={() => setShowAddOrganizationForm(!showAddOrganizationForm)} 
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        {showAddOrganizationForm ? 'Скрыть Учреждение' : 'Добавить Учреждение'}
-      </button>
-
-      {showAddOrganizationForm && (
-        <form onSubmit={handleOrganizationSubmit} className="mb-4">
-          <input
+    <div>
+      <Header />
+      <div className="container mx-auto p-4">
+        <h2 className="text-2xl font-bold mb-4">Образовательные учреждения</h2>
+        <div className="mb-4">
+          <input 
             type="text"
-            name="name"
-            value={newEducationalOrganization.name}
-            placeholder="Название"
-            onChange={handleOrganizationInputChange}
-            required
+            placeholder="Искать по названию..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="p-2 rounded border border-gray-400 mr-2"
           />
-          <input
-            type="text"
-            name="full_name"
-            value={newEducationalOrganization.full_name}
-            placeholder="Полное название"
-            onChange={handleOrganizationInputChange}
-            required
-            className="p-2 rounded border border-gray-400 mr-2"
-          />
-          <button 
-            type="submit" 
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Добавить Учреждение
-          </button>
-        </form>
-      )}
+        </div>
+        <button 
+          onClick={() => setShowAddOrganizationForm(!showAddOrganizationForm)} 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+        >
+          {showAddOrganizationForm ? 'Скрыть Учреждение' : 'Добавить Учреждение'}
+        </button>
 
-      <ul className="mt-4">
-        {filteredEducationalOrganizations.map(educationalOrganization => (
-          <li key={educationalOrganization.id} className="mb-4">
-            <div className="border border-gray-300 p-4 rounded">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-xl font-semibold">{educationalOrganization.name}</h3>
-                <div>
+        {showAddOrganizationForm && (
+          <form onSubmit={handleOrganizationSubmit} className="mb-4">
+            <input
+              type="text"
+              name="name"
+              value={newEducationalOrganization.name}
+              placeholder="Название"
+              onChange={handleOrganizationInputChange}
+              required
+              className="p-2 rounded border border-gray-400 mr-2"
+            />
+            <input
+              type="text"
+              name="full_name"
+              value={newEducationalOrganization.full_name}
+              placeholder="Полное название"
+              onChange={handleOrganizationInputChange}
+              required
+              className="p-2 rounded border border-gray-400 mr-2"
+            />
+            <button 
+              type="submit" 
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Добавить Учреждение
+            </button>
+          </form>
+        )}
+
+        <ul className="mt-4">
+          {filteredEducationalOrganizations.map(educationalOrganization => (
+            <li key={educationalOrganization.id} className="mb-4">
+              <div className="border border-gray-300 p-4 rounded">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-xl font-semibold">{educationalOrganization.name}</h3>
+                  <div>
+                    <button 
+                      onClick={() => showUpdateForm(educationalOrganization)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                    >
+                      Изменить
+                    </button>
+                    <button 
+                      onClick={() => deleteEducationalOrganization(educationalOrganization.id)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    >
+                      Удалить
+                    </button>
+                  </div>
+                </div>
+                <p className="text-gray-600">{educationalOrganization.full_name}</p>
+              </div>
+              {showUpdateOrganizationForm && updatedEducationalOrganization.id === educationalOrganization.id && (
+                <form onSubmit={handleUpdateSubmit} className="mt-2">
+                  <input
+                    type="text"
+                    name="name"
+                    value={updatedEducationalOrganization.name}
+                    placeholder="Название"
+                    onChange={handleUpdateInputChange}
+                    required
+                    className="p-2 rounded border border-gray-400 mr-2"
+                  />
+                  <input
+                    type="text"
+                    name="full_name"
+                    value={updatedEducationalOrganization.full_name}
+                    placeholder="Полное название"
+                    onChange={handleUpdateInputChange}
+                    required
+                    className="p-2 rounded border border-gray-400 mr-2"
+                  />
                   <button 
-                    onClick={() => showUpdateForm(educationalOrganization)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                    type="submit" 
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                   >
                     Изменить
                   </button>
-                  <button 
-                    onClick={() => deleteEducationalOrganization(educationalOrganization.id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                  >
-                    Удалить
-                  </button>
-                </div>
-              </div>
-              <p className="text-gray-600">{educationalOrganization.full_name}</p>
-            </div>
-            {showUpdateOrganizationForm && updatedEducationalOrganization.id === educationalOrganization.id && (
-              <form onSubmit={handleUpdateSubmit} className="mt-2">
-                <input
-                  type="text"
-                  name="name"
-                  value={updatedEducationalOrganization.name}
-                  placeholder="Название"
-                  onChange={handleUpdateInputChange}
-                  required
-                  className="p-2 rounded border border-gray-400 mr-2"
-                />
-                <input
-                  type="text"
-                  name="full_name"
-                  value={updatedEducationalOrganization.full_name}
-                  placeholder="Полное название"
-                  onChange={handleUpdateInputChange}
-                  required
-                  className="p-2 rounded border border-gray-400 mr-2"
-                />
-                <button 
-                  type="submit" 
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Изменить
-                </button>
-              </form>
-            )}
-          </li>
-        ))}
-      </ul>
+                </form>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

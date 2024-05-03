@@ -5,7 +5,7 @@ import { useContext } from 'react'
 import axiosInstance from './axiosInstance';
 import AuthContext from '../context/AuthContext';
 
-const baseURL = 'http://94.26.225.46:8000/'
+const baseURL = 'https://backtyabin.neeboo.ru'
 
 
 const useAxios = () => {

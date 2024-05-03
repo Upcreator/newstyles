@@ -4,7 +4,7 @@ import { useNavigate  } from 'react-router-dom'
 import axios from 'axios'
 
 const AuthContext = createContext()
-const baseURL = 'http://94.26.225.46:8000/'
+const baseURL = 'https://backtyabin.neeboo.ru'
 
 export default AuthContext;
 

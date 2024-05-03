@@ -3,7 +3,7 @@ import {jwtDecode} from "jwt-decode";
 import dayjs from 'dayjs'
 
 
-const baseURL = 'http://94.26.225.46:8000/'
+const baseURL = 'https://backtyabin.neeboo.ru'
 
 
 let authTokens = localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null
