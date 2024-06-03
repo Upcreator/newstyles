@@ -18,7 +18,7 @@ const Header = () => {
 
     // JSX for header with dropdown menu
     return (
-        <header className="bg-gray-900 text-white py-4">
+        <header className="bg-blue-500 text-white py-4">
             <div className="container mx-auto flex justify-between items-center">
                 {/* Add horizontal padding to the left */}
                 <Link to="/" className="text-2xl font-bold px-4">Корпоративный Университет</Link>
@@ -26,7 +26,7 @@ const Header = () => {
                 <div className="relative hidden md:block">
                     {/* Links for larger screens */}
                     <nav>
-                        <ul className="flex space-x-4">
+                        <ul className="flex space-x-4 font-bold">
                             <li><a href="/practices" className="hover:text-gray-300">Практики</a></li>
                             <li><a href="/application_list" className="hover:text-gray-300">Заявки</a></li>
                             <li><a href="/moderators" className="hover:text-gray-300">Модераторы</a></li>
