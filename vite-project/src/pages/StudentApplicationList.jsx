@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
-import axios from 'axios';
 import Header from '../components/Header';
+
 const StudentApplicationListPage = () => {
     const [applications, setApplications] = useState([]);
     const [practices, setPractices] = useState([]);
     const api = useAxios();
 
     useEffect(() => {
-        fetchApplications();
+        fetchApplicationsAndPractices();
     }, []);
 
-    const fetchApplications = async () => {
+    const fetchApplicationsAndPractices = async () => {
         try {
             const [applicationsResponse, practicesResponse] = await Promise.all([
                 api.get('/application/list/'),
-                api.get('/api/practices/') // Adjust the endpoint based on your API
+                api.get('/api/practices/')
             ]);
             setApplications(applicationsResponse.data);
             setPractices(practicesResponse.data);
@@ -28,12 +28,12 @@ const StudentApplicationListPage = () => {
         try {
             const applicationToUpdate = applications.find(app => app.id === id);
             const response = await api.put(`/application/manage/${id}/`, {
-                full_name: applicationToUpdate.full_name, 
-                date_birth: applicationToUpdate.date_birth, 
+                full_name: applicationToUpdate.full_name,
+                date_birth: applicationToUpdate.date_birth,
                 email: applicationToUpdate.email,
                 phone_number: applicationToUpdate.phone_number,
                 status: newStatus,
-                practice: applicationToUpdate.practice // Include practice field
+                practice: applicationToUpdate.practice
             });
             setApplications(applications.map(application => {
                 if (application.id === id) {
@@ -47,6 +47,11 @@ const StudentApplicationListPage = () => {
         }
     };
 
+    const getPracticeName = (practiceId) => {
+        const practice = practices.find(practice => practice.id === practiceId);
+        return practice ? practice.name : 'Unknown';
+    };
+
     return (
         <div>
             <Header />
@@ -54,20 +59,45 @@ const StudentApplicationListPage = () => {
                 <h1 className="text-3xl font-bold mb-4">Список Заявок Студентов</h1>
                 <div className="bg-gray-100 p-4 rounded-lg">
                     <h2 className="text-xl font-bold mb-2">Заявки</h2>
-                    <ul>
-                        {applications.map(application => (
-                            <li key={application.id} className="mb-4 p-4 bg-white rounded-lg shadow-md">
-                                {/* Display application details */}
-                                <p className="text-lg font-semibold">{application.full_name}</p>
-                                <p>Статус: {application.status}</p>
-                                {/* Buttons for changing status */}
-                                <div className="flex mt-2">
-                                    <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 mr-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" onClick={() => handleChangeStatus(application.id, 'Отклонено')}>Отклонить</button>
-                                    <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" onClick={() => handleChangeStatus(application.id, 'Принято')}>Принять</button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                    <table className="w-full">
+                        <thead>
+                            <tr>
+                                <th className="p-2 border">ФИО</th>
+                                <th className="p-2 border">Дата рождения</th>
+                                <th className="p-2 border">Email</th>
+                                <th className="p-2 border">Телефон</th>
+                                <th className="p-2 border">Статус</th>
+                                <th className="p-2 border">Практика</th>
+                                <th className="p-2 border">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {applications.map(application => (
+                                <tr key={application.id}>
+                                    <td className="p-2 border">{application.full_name}</td>
+                                    <td className="p-2 border">{application.date_birth}</td>
+                                    <td className="p-2 border">{application.email}</td>
+                                    <td className="p-2 border">{application.phone_number}</td>
+                                    <td className="p-2 border">{application.status}</td>
+                                    <td className="p-2 border">{getPracticeName(application.practice)}</td>
+                                    <td className="p-2 border">
+                                        <button 
+                                            onClick={() => handleChangeStatus(application.id, 'Отклонено')}
+                                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded mr-2"
+                                        >
+                                            Отклонить
+                                        </button>
+                                        <button 
+                                            onClick={() => handleChangeStatus(application.id, 'Принято')}
+                                            className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded"
+                                        >
+                                            Принять
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
