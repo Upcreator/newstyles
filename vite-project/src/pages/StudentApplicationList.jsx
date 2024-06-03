@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
 import Header from '../components/Header';
+import Modal from '../components/Modal';
 
 const StudentApplicationListPage = () => {
     const [applications, setApplications] = useState([]);
     const [practices, setPractices] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentApplication, setCurrentApplication] = useState(null);
     const api = useAxios();
 
     useEffect(() => {
@@ -52,6 +55,16 @@ const StudentApplicationListPage = () => {
         return practice ? practice.name : 'Unknown';
     };
 
+    const openModal = (application) => {
+        setCurrentApplication(application);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setCurrentApplication(null);
+    };
+
     return (
         <div>
             <Header />
@@ -82,16 +95,10 @@ const StudentApplicationListPage = () => {
                                     <td className="p-2 border">{getPracticeName(application.practice)}</td>
                                     <td className="p-2 border">
                                         <button 
-                                            onClick={() => handleChangeStatus(application.id, 'Отклонено')}
-                                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded mr-2"
+                                            onClick={() => openModal(application)}
+                                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
                                         >
-                                            Отклонить
-                                        </button>
-                                        <button 
-                                            onClick={() => handleChangeStatus(application.id, 'Принято')}
-                                            className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded"
-                                        >
-                                            Принять
+                                            Изменить статус
                                         </button>
                                     </td>
                                 </tr>
@@ -100,6 +107,13 @@ const StudentApplicationListPage = () => {
                     </table>
                 </div>
             </div>
+            {isModalOpen && currentApplication && (
+                <Modal 
+                    application={currentApplication} 
+                    onClose={closeModal} 
+                    onChangeStatus={handleChangeStatus}
+                />
+            )}
         </div>
     );
 };
