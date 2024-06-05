@@ -6,22 +6,37 @@ import Modal from '../components/Modal';
 const StudentApplicationListPage = () => {
     const [applications, setApplications] = useState([]);
     const [practices, setPractices] = useState([]);
+    const [educational_organizations, setEducational_organizations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentApplication, setCurrentApplication] = useState(null);
     const api = useAxios();
 
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        const options = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        };
+        return date.toLocaleString('ru-RU', options);
+    };
+
     useEffect(() => {
-        fetchApplicationsAndPractices();
+        fetchDataforApplications();
     }, []);
 
-    const fetchApplicationsAndPractices = async () => {
+    const fetchDataforApplications = async () => {
         try {
-            const [applicationsResponse, practicesResponse] = await Promise.all([
+            const [applicationsResponse, practicesResponse, educational_organizationResponse] = await Promise.all([
                 api.get('/application/list/'),
-                api.get('/api/practices/')
+                api.get('/api/practices/'),
+                api.get('/api/educational_organizations/')
             ]);
             setApplications(applicationsResponse.data);
             setPractices(practicesResponse.data);
+            setEducational_organizations(educational_organizationResponse.data);
         } catch (error) {
             console.error(error);
         }
@@ -55,6 +70,11 @@ const StudentApplicationListPage = () => {
         return practice ? practice.name : 'Unknown';
     };
 
+    const getEducational_organizationName = (educational_organizationId) => {
+        const educational_organization = educational_organizations.find(educational_organization => educational_organization.id === educational_organizationId);
+        return educational_organization ? educational_organization.full_name : 'Unknown';
+    };
+
     const openModal = (application) => {
         setCurrentApplication(application);
         setIsModalOpen(true);
@@ -69,37 +89,76 @@ const StudentApplicationListPage = () => {
         <div>
             <Header />
             <div className="container mx-auto px-4">
-                <h1 className="text-3xl font-bold mb-4">Список Заявок Студентов</h1>
+                <h1 className="text-3xl font-bold mb-4">Нерассмотренные заявки</h1>
                 <div className="bg-gray-100 p-4 rounded-lg">
                     <h2 className="text-xl font-bold mb-2">Заявки</h2>
                     <table className="w-full">
-                        <thead>
+                        <thead className ='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
                             <tr>
-                                <th className="p-2 border">ФИО</th>
-                                <th className="p-2 border">Дата рождения</th>
-                                <th className="p-2 border">Email</th>
-                                <th className="p-2 border">Телефон</th>
-                                <th className="p-2 border">Статус</th>
-                                <th className="p-2 border">Практика</th>
-                                <th className="p-2 border">Действия</th>
+                                <th scope="col" className="px-6 py-3">
+                                    <div className='flex items-center'>
+                                    ФИО
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                        </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    <div className='flex items-center'>
+                                        Дата заявки
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                        </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    <div className='flex items-center'>
+                                    Email
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                        </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    <div className='flex items-center'>
+                                    Образовательное учреждение
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                        </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    <div className='flex items-center'>
+                                    Статус
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                        </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    <div className='flex items-center'>
+                                    Практика
+                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                        </svg></a>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                        <span class="sr-only">Edit</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {applications.map(application => (
-                                <tr key={application.id}>
-                                    <td className="p-2 border">{application.full_name}</td>
-                                    <td className="p-2 border">{application.date_birth}</td>
-                                    <td className="p-2 border">{application.email}</td>
-                                    <td className="p-2 border">{application.phone_number}</td>
-                                    <td className="p-2 border">{application.status}</td>
-                                    <td className="p-2 border">{getPracticeName(application.practice)}</td>
-                                    <td className="p-2 border">
-                                        <button 
-                                            onClick={() => openModal(application)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
-                                        >
-                                            Изменить статус
-                                        </button>
+                                <tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700' key={application.id}>
+                                    <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{application.full_name}</td>
+                                    <td className="px-6 py-4">{formatDate(application.created_at)}</td>
+                                    <td className="px-6 py-4">{application.email}</td>
+                                    <td className="px-6 py-4">{getEducational_organizationName(application.educational_organization)}</td>
+                                    <td className="px-6 py-4">{application.status}</td>
+                                    <td className="px-6 py-4">{getPracticeName(application.practice)}</td>                             
+                                    <td class="px-6 py-4">
+                                        <div href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={() => openModal(application)}>Изменить статус</div>
                                     </td>
                                 </tr>
                             ))}
@@ -110,6 +169,8 @@ const StudentApplicationListPage = () => {
             {isModalOpen && currentApplication && (
                 <Modal 
                     application={currentApplication} 
+                    practices={practices} 
+                    educational_organizations={educational_organizations} 
                     onClose={closeModal} 
                     onChangeStatus={handleChangeStatus}
                 />
