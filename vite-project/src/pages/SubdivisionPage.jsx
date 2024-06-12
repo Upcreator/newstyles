@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
-
+import Header from '../components/Header';
 const SubdivisionPage = () => {
   const [subdivisions, setSubdivisions] = useState([]);
   const [newSubdivision, setNewSubdivision] = useState({ name: '' });
@@ -93,92 +93,95 @@ const SubdivisionPage = () => {
   });
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Подразделения</h2>
-      <div className="mb-4">
-        <input 
-          type="text"
-          placeholder="Искать по названию..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 rounded border border-gray-400 mr-2"
-        />
-      </div>
-      <button 
-        onClick={() => setShowAddSubdivisionForm(!showAddSubdivisionForm)} 
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        {showAddSubdivisionForm ? 'Скрыть Подразделение' : 'Добавить Подразделение'}
-      </button>
-
-      {showAddSubdivisionForm && (
-        <form onSubmit={handleSubdivisionSubmit} className="mb-4">
-          <input
+    <div>
+      <Header />
+      <div className="container mx-auto p-4">
+        <h2 className="text-2xl font-bold mb-4">Подразделения</h2>
+        <div className="mb-4">
+          <input 
             type="text"
-            name="name"
-            value={newSubdivision.name}
-            placeholder="Название"
-            onChange={handleSubdivisionInputChange}
-            required
+            placeholder="Искать по названию..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="p-2 rounded border border-gray-400 mr-2"
           />
-          <button 
-            type="submit" 
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Добавить Подразделение
-          </button>
-        </form>
-      )}
+        </div>
+        <button 
+          onClick={() => setShowAddSubdivisionForm(!showAddSubdivisionForm)} 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+        >
+          {showAddSubdivisionForm ? 'Скрыть Подразделение' : 'Добавить Подразделение'}
+        </button>
 
-      <ul className="mt-4">
-        {filteredSubdivisions.map(subdivision => (
-          <li key={subdivision.id} className="mb-4">
-            <div className="border border-gray-300 p-4 rounded">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-xl font-semibold">{subdivision.name}</h3>
-                <div>
-                  <button 
-                    onClick={() => {
-                      setShowUpdateSubdivisionForm(true);
-                      setUpdatedSubdivision(subdivision);
-                    }}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
-                  >
-                    Изменить
-                  </button>
-                  <button 
-                    onClick={() => deleteSubdivision(subdivision.id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                  >
-                    Удалить
-                  </button>
+        {showAddSubdivisionForm && (
+          <form onSubmit={handleSubdivisionSubmit} className="mb-4">
+            <input
+              type="text"
+              name="name"
+              value={newSubdivision.name}
+              placeholder="Название"
+              onChange={handleSubdivisionInputChange}
+              required
+              className="p-2 rounded border border-gray-400 mr-2"
+            />
+            <button 
+              type="submit" 
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Добавить Подразделение
+            </button>
+          </form>
+        )}
+
+        <ul className="mt-4">
+          {filteredSubdivisions.map(subdivision => (
+            <li key={subdivision.id} className="mb-4">
+              <div className="border border-gray-300 p-4 rounded">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-xl font-semibold">{subdivision.name}</h3>
+                  <div>
+                    <button 
+                      onClick={() => {
+                        setShowUpdateSubdivisionForm(true);
+                        setUpdatedSubdivision(subdivision);
+                      }}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                    >
+                      Изменить
+                    </button>
+                    <button 
+                      onClick={() => deleteSubdivision(subdivision.id)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    >
+                      Удалить
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
 
-      {showUpdateSubdivisionForm && (
-        <form onSubmit={handleUpdateSubmit} className="mt-2">
-          <input
-            type="text"
-            name="name"
-            value={updatedSubdivision.name}
-            placeholder="Название"
-            onChange={handleUpdateInputChange}
-            required
-            className="p-2 rounded border border-gray-400 mr-2"
-          />
-          <button 
-            type="submit" 
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Изменить
-          </button>
-        </form>
-      )}
+        {showUpdateSubdivisionForm && (
+          <form onSubmit={handleUpdateSubmit} className="mt-2">
+            <input
+              type="text"
+              name="name"
+              value={updatedSubdivision.name}
+              placeholder="Название"
+              onChange={handleUpdateInputChange}
+              required
+              className="p-2 rounded border border-gray-400 mr-2"
+            />
+            <button 
+              type="submit" 
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Изменить
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 };

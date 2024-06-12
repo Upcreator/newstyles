@@ -15,8 +15,6 @@ import StudetnApplicationList from './pages/StudentApplicationList'
 import ModeratorPage from './pages/ModeratorPage'
 
 
-import Header from './components/Header'
-
 const App = () => {
   return (
     <div className="App">
@@ -27,7 +25,6 @@ const App = () => {
               <Route path="/applications" element={<ApplicationForm />} />
               <Route path="/notification" element={<NotificationApplicationForm />} />
             </Routes>
-          <Header />
           <Routes>
             <Route element={<PrivateRoutes />}>
               <Route path="/" element={<HomePage />} exact/>
@@ -35,7 +32,7 @@ const App = () => {
               <Route path="/educational_organizations" element={<EducationalOrganizationPage />} />
               <Route path="/activities" element={<ActivityPage />} />
               <Route path="/practices" element={<PracticePage />} />
-              <Route path="/appication_list" element={<StudetnApplicationList />} />
+              <Route path="/application_list" element={<StudetnApplicationList />} />
               <Route path="/moderators" element={<ModeratorPage />} />
             </Route>
           </Routes>

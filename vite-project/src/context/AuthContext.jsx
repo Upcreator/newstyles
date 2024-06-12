@@ -4,6 +4,7 @@ import { useNavigate  } from 'react-router-dom'
 import axios from 'axios'
 
 const AuthContext = createContext()
+const baseURL = 'http://127.0.0.1:8000'
 
 export default AuthContext;
 
@@ -20,7 +21,7 @@ export const AuthProvider = ({children}) => {
     let loginUser = async (e) => {
         e.preventDefault();
         try {
-            let response = await axios.post('http://127.0.0.1:8000/api/token/', {
+            let response = await axios.post('https://renderdjangoexample-1t4b.onrender.com/api/token/', {
                 username: e.target.username.value,
                 password: e.target.password.value,
             });
