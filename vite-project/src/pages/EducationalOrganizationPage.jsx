@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
 import Header from '../components/Header';
-import Modal from '../components/Modal'; // Assuming you have a Modal component
 
 const EducationalOrganizationPage = () => {
   const [educationalOrganizations, setEducationalOrganizations] = useState([]);
@@ -11,8 +10,8 @@ const EducationalOrganizationPage = () => {
   const [selectedType, setSelectedType] = useState('');
   const api = useAxios();
 
-  const [showAddOrganizationForm, setShowAddOrganizationForm] = useState(false);
-  const [showUpdateOrganizationForm, setShowUpdateOrganizationForm] = useState(false);
+  const [showAddOrganizationDrawer, setShowAddOrganizationDrawer] = useState(false);
+  const [showUpdateOrganizationDrawer, setShowUpdateOrganizationDrawer] = useState(false);
 
   useEffect(() => {
     getEducationalOrganizations();
@@ -35,7 +34,7 @@ const EducationalOrganizationPage = () => {
       if (response.status === 201) {
         setEducationalOrganizations([...educationalOrganizations, response.data]);
         setNewEducationalOrganization({ name: '', full_name: '' });
-        setShowAddOrganizationForm(false);
+        setShowAddOrganizationDrawer(false);
       }
     } catch (error) {
       console.error('Error adding educational organization:', error);
@@ -47,7 +46,7 @@ const EducationalOrganizationPage = () => {
       const response = await api.put(`/api/educational_organizations/${updatedEducationalOrganization.id}/`, updatedEducationalOrganization);
       if (response.status === 200) {
         setEducationalOrganizations(educationalOrganizations.map(org => (org.id === updatedEducationalOrganization.id ? updatedEducationalOrganization : org)));
-        setShowUpdateOrganizationForm(false);
+        setShowUpdateOrganizationDrawer(false);
         setUpdatedEducationalOrganization({ id: null, name: '', full_name: '' });
       }
     } catch (error) {
@@ -94,7 +93,7 @@ const EducationalOrganizationPage = () => {
 
   const showUpdateForm = (organization) => {
     setUpdatedEducationalOrganization(organization);
-    setShowUpdateOrganizationForm(true);
+    setShowUpdateOrganizationDrawer(true);
   };
 
   const filteredEducationalOrganizations = educationalOrganizations.filter(org => {
@@ -134,46 +133,53 @@ const EducationalOrganizationPage = () => {
         </div>
 
         <button
-          onClick={() => setShowAddOrganizationForm(true)}
+          onClick={() => setShowAddOrganizationDrawer(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
         >
           Добавить Учреждение
         </button>
 
-        <Modal show={showAddOrganizationForm} onClose={() => setShowAddOrganizationForm(false)}>
-          <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-            <form class="space-y-6" onSubmit={handleOrganizationSubmit}>
-              <h5 class="text-xl font-medium text-gray-900 dark:text-white">Add Educational Organization</h5>
+        {/* Drawer for Adding Organization */}
+        {showAddOrganizationDrawer && (
+          <div className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-0 bg-white w-80 dark:bg-gray-800" tabIndex="-1">
+            <h5 className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Add Educational Organization</h5>
+            <button type="button" onClick={() => setShowAddOrganizationDrawer(false)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span className="sr-only">Close menu</span>
+            </button>
+            <form className="space-y-6" onSubmit={handleOrganizationSubmit}>
               <div>
-                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                 <input
                   type="text"
                   name="name"
                   id="name"
                   value={newEducationalOrganization.name}
                   onChange={handleOrganizationInputChange}
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter name"
                   required
                 />
               </div>
               <div>
-                <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
                 <input
                   type="text"
                   name="full_name"
                   id="full_name"
                   value={newEducationalOrganization.full_name}
                   onChange={handleOrganizationInputChange}
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter full name"
                   required
                 />
               </div>
-              <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Organization</button>
+              <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Organization</button>
             </form>
           </div>
-        </Modal>
+        )}
 
         <ul className="mt-4">
           {filteredEducationalOrganizations.map(educationalOrganization => (
@@ -196,45 +202,53 @@ const EducationalOrganizationPage = () => {
                     </button>
                   </div>
                 </div>
-                <p className="text-gray-600">{educationalOrganization.full_name}</p>
+                <p>{educationalOrganization.full_name}</p>
               </div>
             </li>
           ))}
         </ul>
-        <Modal show={showUpdateOrganizationForm} onClose={() => setShowUpdateOrganizationForm(false)}>
-          <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-            <form class="space-y-6" onSubmit={handleUpdateSubmit}>
-              <h5 class="text-xl font-medium text-gray-900 dark:text-white">Изменить Образовательное Учреждение</h5>
+
+        {/* Drawer for Updating Organization */}
+        {showUpdateOrganizationDrawer && (
+          <div className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-0 bg-white w-80 dark:bg-gray-800" tabIndex="-1">
+            <h5 className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Update Educational Organization</h5>
+            <button type="button" onClick={() => setShowUpdateOrganizationDrawer(false)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span className="sr-only">Close menu</span>
+            </button>
+            <form className="space-y-6" onSubmit={handleUpdateSubmit}>
               <div>
-                <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                 <input
                   type="text"
                   name="name"
                   id="name"
                   value={updatedEducationalOrganization.name}
                   onChange={handleUpdateInputChange}
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter name"
                   required
                 />
               </div>
               <div>
-                <label for="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
                 <input
                   type="text"
                   name="full_name"
                   id="full_name"
                   value={updatedEducationalOrganization.full_name}
                   onChange={handleUpdateInputChange}
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter full name"
                   required
                 />
               </div>
-              <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Organization</button>
+              <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Organization</button>
             </form>
           </div>
-        </Modal>
+        )}
       </div>
     </div>
   );
