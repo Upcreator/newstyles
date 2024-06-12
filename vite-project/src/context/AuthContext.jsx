@@ -20,7 +20,7 @@ export const AuthProvider = ({children}) => {
     let loginUser = async (e) => {
         e.preventDefault();
         try {
-            let response = await axios.post('https://renderdjangoexample-1t4b.onrender.com/api/token/', {
+            let response = await axios.post('http://127.0.0.1:8000/api/token/', {
                 username: e.target.username.value,
                 password: e.target.password.value,
             });
