@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
 import Header from '../components/Header';
+import Modal from '../components/Modal'; // Assuming you have a Modal component
+
 const EducationalOrganizationPage = () => {
   const [educationalOrganizations, setEducationalOrganizations] = useState([]);
   const [newEducationalOrganization, setNewEducationalOrganization] = useState({ name: '', full_name: '' });
   const [updatedEducationalOrganization, setUpdatedEducationalOrganization] = useState({ id: null, name: '', full_name: '' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const api = useAxios();
 
   const [showAddOrganizationForm, setShowAddOrganizationForm] = useState(false);
@@ -32,7 +35,7 @@ const EducationalOrganizationPage = () => {
       if (response.status === 201) {
         setEducationalOrganizations([...educationalOrganizations, response.data]);
         setNewEducationalOrganization({ name: '', full_name: '' });
-        setShowAddOrganizationForm(false); 
+        setShowAddOrganizationForm(false);
       }
     } catch (error) {
       console.error('Error adding educational organization:', error);
@@ -95,8 +98,11 @@ const EducationalOrganizationPage = () => {
   };
 
   const filteredEducationalOrganizations = educationalOrganizations.filter(org => {
-    return org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           org.full_name.toLowerCase().includes(searchTerm.toLowerCase());
+    return (
+      (selectedType === '' || org.type === selectedType) &&
+      (org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      org.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
   });
 
   return (
@@ -105,7 +111,7 @@ const EducationalOrganizationPage = () => {
       <div className="container mx-auto p-4">
         <h2 className="text-2xl font-bold mb-4">Образовательные учреждения</h2>
         <div className="mb-4">
-          <input 
+          <input
             type="text"
             placeholder="Искать по названию..."
             value={searchTerm}
@@ -113,48 +119,62 @@ const EducationalOrganizationPage = () => {
             className="p-2 rounded border border-gray-400 mr-2"
           />
         </div>
-        <button 
-          onClick={() => setShowAddOrganizationForm(!showAddOrganizationForm)} 
+        
+        {/* Dropdown for selecting type */}
+        <div className="mb-4">
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="p-2 rounded border border-gray-400 mr-2"
+          >
+            <option value="">Все типы</option>
+            <option value="ВУЗ">ВУЗ</option>
+            <option value="Колледж">Колледж</option>
+          </select>
+        </div>
+
+        <button
+          onClick={() => setShowAddOrganizationForm(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
         >
-          {showAddOrganizationForm ? 'Скрыть Учреждение' : 'Добавить Учреждение'}
+          Добавить Учреждение
         </button>
 
-        {showAddOrganizationForm && (
-          <form onSubmit={handleOrganizationSubmit} className="mb-4">
-            <input
-              type="text"
-              name="name"
-              value={newEducationalOrganization.name}
-              placeholder="Название"
-              onChange={handleOrganizationInputChange}
-              required
-              className="p-2 rounded border border-gray-400 mr-2"
-            />
-            <input
-              type="text"
-              name="full_name"
-              value={newEducationalOrganization.full_name}
-              placeholder="Полное название"
-              onChange={handleOrganizationInputChange}
-              required
-              className="p-2 rounded border border-gray-400 mr-2"
-            />
-            <button 
-              type="submit" 
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Добавить Учреждение
-            </button>
-          </form>
-        )}
-        <form className="max-w-sm mx-auto">
-          <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Выберите тип</label>
-          <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option>ВУЗ</option>
-            <option>Колледж</option>
-          </select>
-        </form>
+        <Modal show={showAddOrganizationForm} onClose={() => setShowAddOrganizationForm(false)}>
+          <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <form class="space-y-6" onSubmit={handleOrganizationSubmit}>
+              <h5 class="text-xl font-medium text-gray-900 dark:text-white">Add Educational Organization</h5>
+              <div>
+                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={newEducationalOrganization.name}
+                  onChange={handleOrganizationInputChange}
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Enter name"
+                  required
+                />
+              </div>
+              <div>
+                <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                <input
+                  type="text"
+                  name="full_name"
+                  id="full_name"
+                  value={newEducationalOrganization.full_name}
+                  onChange={handleOrganizationInputChange}
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Enter full name"
+                  required
+                />
+              </div>
+              <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Organization</button>
+            </form>
+          </div>
+        </Modal>
+
         <ul className="mt-4">
           {filteredEducationalOrganizations.map(educationalOrganization => (
             <li key={educationalOrganization.id} className="mb-4">
@@ -162,13 +182,13 @@ const EducationalOrganizationPage = () => {
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-xl font-semibold">{educationalOrganization.name}</h3>
                   <div>
-                    <button 
+                    <button
                       onClick={() => showUpdateForm(educationalOrganization)}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
                     >
                       Изменить
                     </button>
-                    <button 
+                    <button
                       onClick={() => deleteEducationalOrganization(educationalOrganization.id)}
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
                     >
@@ -178,37 +198,43 @@ const EducationalOrganizationPage = () => {
                 </div>
                 <p className="text-gray-600">{educationalOrganization.full_name}</p>
               </div>
-              {showUpdateOrganizationForm && updatedEducationalOrganization.id === educationalOrganization.id && (
-                <form onSubmit={handleUpdateSubmit} className="mt-2">
-                  <input
-                    type="text"
-                    name="name"
-                    value={updatedEducationalOrganization.name}
-                    placeholder="Название"
-                    onChange={handleUpdateInputChange}
-                    required
-                    className="p-2 rounded border border-gray-400 mr-2"
-                  />
-                  <input
-                    type="text"
-                    name="full_name"
-                    value={updatedEducationalOrganization.full_name}
-                    placeholder="Полное название"
-                    onChange={handleUpdateInputChange}
-                    required
-                    className="p-2 rounded border border-gray-400 mr-2"
-                  />
-                  <button 
-                    type="submit" 
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Изменить
-                  </button>
-                </form>
-              )}
             </li>
           ))}
         </ul>
+        <Modal show={showUpdateOrganizationForm} onClose={() => setShowUpdateOrganizationForm(false)}>
+          <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <form class="space-y-6" onSubmit={handleUpdateSubmit}>
+              <h5 class="text-xl font-medium text-gray-900 dark:text-white">Изменить Образовательное Учреждение</h5>
+              <div>
+                <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={updatedEducationalOrganization.name}
+                  onChange={handleUpdateInputChange}
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Enter name"
+                  required
+                />
+              </div>
+              <div>
+                <label for="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                <input
+                  type="text"
+                  name="full_name"
+                  id="full_name"
+                  value={updatedEducationalOrganization.full_name}
+                  onChange={handleUpdateInputChange}
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Enter full name"
+                  required
+                />
+              </div>
+              <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Organization</button>
+            </form>
+          </div>
+        </Modal>
       </div>
     </div>
   );

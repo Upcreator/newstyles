@@ -9,7 +9,7 @@ const HomePage = () => {
             <div className="container mx-auto px-4">
                 {/* Add padding to the container */}
                 <div className="mt-8">
-                    <h1 className="text-3xl font-bold mb-4">Добро пожаловать в систему Корпоративного Университета</h1>
+                    <h1 className="text-3xl font-bold mb-4">Добро пожаловать в систему практик Корпоративного Университета</h1>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Three images with text on hover */}
                         <Link to="/educational_organizations" className="relative block w-full h-64">

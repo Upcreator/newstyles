@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../utils/useAxios';
 import Header from '../components/Header';
-import Modal from '../components/Modal';
+import ModalDetail from '../components/ModalDetail';
 
 const StudentApplicationListPage = () => {
     const [applications, setApplications] = useState([]);
@@ -167,7 +167,7 @@ const StudentApplicationListPage = () => {
                 </div>
             </div>
             {isModalOpen && currentApplication && (
-                <Modal 
+                <ModalDetail
                     application={currentApplication} 
                     practices={practices} 
                     educational_organizations={educational_organizations} 
