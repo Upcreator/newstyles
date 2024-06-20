@@ -21,7 +21,7 @@ const LoginPage = () => {
             </div>
 
             {/* Login Header */}
-            <h2 className="text-3xl font-bold text-center text-indigo-700 mb-4">Копроративный университет ГСП</h2>
+            <h2 className="text-3xl font-bold text-center text-indigo-700 mb-4">Корпоративный университет ГСП</h2>
 
             {/* Login Form */}
             <form className="space-y-4" onSubmit={loginUser}>

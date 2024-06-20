@@ -12,8 +12,6 @@ const EducationalOrganizationPage = () => {
 
   const [showAddOrganizationDrawer, setShowAddOrganizationDrawer] = useState(false);
   const [showUpdateOrganizationDrawer, setShowUpdateOrganizationDrawer] = useState(false);
-  const [showAddOrganizationDrawer, setShowAddOrganizationDrawer] = useState(false);
-  const [showUpdateOrganizationDrawer, setShowUpdateOrganizationDrawer] = useState(false);
 
   useEffect(() => {
     getEducationalOrganizations();
@@ -96,7 +94,6 @@ const EducationalOrganizationPage = () => {
   const showUpdateForm = (organization) => {
     setUpdatedEducationalOrganization(organization);
     setShowUpdateOrganizationDrawer(true);
-    setShowUpdateOrganizationDrawer(true);
   };
 
   const filteredEducationalOrganizations = educationalOrganizations.filter(org => {
@@ -137,7 +134,6 @@ const EducationalOrganizationPage = () => {
 
         <button
           onClick={() => setShowAddOrganizationDrawer(true)}
-          onClick={() => setShowAddOrganizationDrawer(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
         >
           Добавить Учреждение
@@ -148,7 +144,7 @@ const EducationalOrganizationPage = () => {
           <>
             <div className="fixed inset-0 bg-black opacity-50 z-30"></div>
             <div className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-0 bg-white w-80 dark:bg-gray-800" tabIndex="-1">
-              <h5 className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Добавить Образовательное учреждение</h5>
+              <h5 className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Добавить образовательное учреждение</h5>
               <button type="button" onClick={() => setShowAddOrganizationDrawer(false)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -183,7 +179,7 @@ const EducationalOrganizationPage = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип образовательного учреждения</label>
+                  <label htmlFor="type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип</label>
                   <select
                     name="type"
                     id="type"
@@ -197,7 +193,7 @@ const EducationalOrganizationPage = () => {
                     <option value="Колледж">Колледж</option>
                   </select>
                 </div>
-                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Добавить организацию</button>
+                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Добавить</button>
               </form>
             </div>
           </>
@@ -236,7 +232,7 @@ const EducationalOrganizationPage = () => {
           <>
             <div className="fixed inset-0 bg-black opacity-50 z-30"></div>
             <div className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-0 bg-white w-80 dark:bg-gray-800" tabIndex="-1">
-              <h5 className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Update Educational Organization</h5>
+              <h5 className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Изменить образовательное учреждение</h5>
               <button type="button" onClick={() => setShowUpdateOrganizationDrawer(false)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -245,7 +241,7 @@ const EducationalOrganizationPage = () => {
               </button>
               <form className="space-y-6" onSubmit={handleUpdateSubmit}>
                 <div>
-                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Название</label>
                   <input
                     type="text"
                     name="name"
@@ -253,12 +249,12 @@ const EducationalOrganizationPage = () => {
                     value={updatedEducationalOrganization.name}
                     onChange={handleUpdateInputChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="Enter name"
+                    placeholder="Введите название"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                  <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Полное название</label>
                   <input
                     type="text"
                     name="full_name"
@@ -266,12 +262,12 @@ const EducationalOrganizationPage = () => {
                     value={updatedEducationalOrganization.full_name}
                     onChange={handleUpdateInputChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="Enter full name"
+                    placeholder="Введите полное название"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+                  <label htmlFor="type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип</label>
                   <select
                     name="type"
                     id="type"
@@ -285,7 +281,7 @@ const EducationalOrganizationPage = () => {
                     <option value="Колледж">Колледж</option>
                   </select>
                 </div>
-                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Organization</button>
+                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Изменить</button>
               </form>
             </div>
           </>
