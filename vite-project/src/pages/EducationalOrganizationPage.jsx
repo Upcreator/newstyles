@@ -12,6 +12,8 @@ const EducationalOrganizationPage = () => {
 
   const [showAddOrganizationDrawer, setShowAddOrganizationDrawer] = useState(false);
   const [showUpdateOrganizationDrawer, setShowUpdateOrganizationDrawer] = useState(false);
+  const [showAddOrganizationDrawer, setShowAddOrganizationDrawer] = useState(false);
+  const [showUpdateOrganizationDrawer, setShowUpdateOrganizationDrawer] = useState(false);
 
   useEffect(() => {
     getEducationalOrganizations();
@@ -94,6 +96,7 @@ const EducationalOrganizationPage = () => {
   const showUpdateForm = (organization) => {
     setUpdatedEducationalOrganization(organization);
     setShowUpdateOrganizationDrawer(true);
+    setShowUpdateOrganizationDrawer(true);
   };
 
   const filteredEducationalOrganizations = educationalOrganizations.filter(org => {
@@ -133,6 +136,7 @@ const EducationalOrganizationPage = () => {
         </div>
 
         <button
+          onClick={() => setShowAddOrganizationDrawer(true)}
           onClick={() => setShowAddOrganizationDrawer(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
         >
